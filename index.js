@@ -9,13 +9,18 @@
     } else {
       var P = Promise || global.Promise
       return new P(function (resolve, reject) {
-        fn(function (err, res) {
+        var callback = function (err, res) {
           if (err !== null && err !== undefined) {
             reject(err)
           } else {
             resolve(res)
           }
-        })
+        }
+        try {
+          fn(callback)
+        } catch (e) {
+          reject(e)
+        }
       })
     }
   }
